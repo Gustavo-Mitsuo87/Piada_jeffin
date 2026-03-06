@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Homenagem ao Prof</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding-top: 50px;
+            background: #f4f4f4;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .foto-prof {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        input,
+        button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            border: none;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+        }
+
+        .spam-img {
+            position: fixed;
+            width: 150px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        /* Estilo padrão para Computador */
+
+
+        /* --- AJUSTE PARA CELULAR --- */
+        @media (max-width: 600px) {
+            body {
+                padding-top: 20px;
+                /* Menos espaço no topo */
+            }
+
+            .container {
+                width: 95%;
+                padding: 20px 10px;
+                box-sizing: border-box;
+            }
+
+            .foto-prof {
+                width: 120px;
+                /* Foto um pouco menor no celular */
+                height: 120px;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+                /* Diminui o título para caber em uma linha */
+            }
+
+            input,
+            button {
+                width: 90%;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- FOTO CENTRALIZADA DO PROF -->
+        <img src="Alegria.jpeg" alt="Prof" class="foto-prof">
+
+        <h2>Contador de Piadas</h2>
+
+        <input type="number" id="limite" placeholder="Defina o limite de piadas">
+        <button id="btnComeçar" onclick="setarLimite()">Definar Limite</button>
+
+        <h3 id="status">Aguardando limite...</h3>
+        <button id="btnPiada" onclick="contarPiada()" style="display:none;">Próxima Piada!</button>
+    </div>
+
+    <script>
+        let maxPiadas = 0;
+        let atual = 0;
+        // COLOQUE O CAMINHO DAS 3 FOTOS AQUI
+        const fotosProf = [
+            'mancha.jpg',
+            'jefff.jpeg',
+            'habitat.jpg'
+        ];
+
+        function setarLimite() {
+            const input = document.getElementById('limite');
+            const val = parseInt(input.value);
+
+            if (isNaN(val) || val <= 0) {
+                alert("Digite um número válido, pô!");
+                return;
+            }
+
+            maxPiadas = val;
+            input.readOnly = true;
+            document.getElementById('btnComeçar').style.display = 'none';
+            document.getElementById('btnPiada').style.display = 'inline-block';
+            atualizarTexto();
+        }
+
+        function atualizarTexto() {
+            const status = document.getElementById('status');
+            if (atual < maxPiadas) {
+                status.innerText = `Piadas contadas: ${atual}`;
+            } else if (atual === maxPiadas) {
+                status.innerText = "Cuidado... essa é a última!";
+            } else {
+                status.innerText = "ERRO: LIMITE ULTRAPASSADO! KKKKK";
+                document.getElementById('btnPiada').disabled = true;
+                quebrarTudo();
+            }
+        }
+
+        function contarPiada() {
+            atual++;
+            atualizarTexto();
+        }
+
+        function quebrarTudo() {
+            for (let i = 0; i < 80; i++) {
+                setTimeout(() => {
+                    const img = document.createElement('img');
+                    img.src = fotosProf[Math.floor(Math.random() * fotosProf.length)];
+                    img.className = 'spam-img';
+
+                    // Posições aleatórias
+                    const x = Math.random() * (window.innerWidth - 150);
+                    const y = Math.random() * (window.innerHeight - 150);
+
+                    img.style.left = x + 'px';
+                    img.style.top = y + 'px';
+                    // Rotação aleatória para o caos
+                    img.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+                    document.body.appendChild(img);
+                }, i * 50); // vai aparecendo uma por uma rápido
+            }
+        }
+    </script>
+</body>
+
+</html>
